@@ -11,9 +11,9 @@ class CreateClient extends CreateRecord
 {
     protected static string $resource = ClientResource::class;
 
-    protected function mutateFormDataBeforeCreate(array $data): array
-    {
-        $data['user_id'] = auth()->id(); // Сохранение ID текущего пользователя
-        return $data;
-    }
+    // protected function mutateFormDataBeforeCreate(array $data): array
+    // {
+    //     $data['user_id'] = auth()->id(); // Сохранение ID текущего пользователя
+    //     return $data;
+    // }
 }

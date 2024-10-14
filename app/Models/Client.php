@@ -6,6 +6,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Enums\ClientStatus;
+use Illuminate\Database\Eloquent\Attributes\ScopedBy;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+
+use App\Models\Scopes\UserRoomScope;
+use App\Observers\ClientObserver;
+
+
+#[ScopedBy([UserRoomScope::class])]
+#[ObservedBy([ClientObserver::class])]
 
 class Client extends Model
 {

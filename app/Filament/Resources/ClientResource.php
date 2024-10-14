@@ -15,6 +15,10 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Enums\ClientStatus;
+use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Actions\ViewAction;
 
 class ClientResource extends Resource
 {
@@ -22,10 +26,10 @@ class ClientResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    public static function getEloquentQuery (): Builder
-    {
-        return parent::getEloquentQuery ()->where ('user_id', auth ()->id ());
-    }
+    // public static function getEloquentQuery (): Builder
+    // {
+    //     return parent::getEloquentQuery ()->where ('user_id', auth ()->id ());
+    // }
 
 
 
@@ -89,7 +93,11 @@ class ClientResource extends Resource
                 //
             ])
             ->actions ([
-                Tables\Actions\EditAction::make (),
+                ActionGroup::make([
+                    Tables\Actions\ViewAction::make (),
+                    Tables\Actions\EditAction::make (),
+                    Tables\Actions\DeleteAction::make (),
+                ])
             ])
             ->bulkActions ([
                 Tables\Actions\BulkActionGroup::make ([

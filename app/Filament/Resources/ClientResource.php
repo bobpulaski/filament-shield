@@ -23,7 +23,8 @@ use Filament\Tables\Actions\ViewAction;
 class ClientResource extends Resource
 {
     protected static ?string $model = Client::class;
-
+    protected static ?string $label = 'Клиент';
+    protected static ?string $pluralLabel = 'Клиенты';
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     // public static function getEloquentQuery (): Builder
@@ -56,8 +57,6 @@ class ClientResource extends Resource
                     ->maxLength (255),
                 Forms\Components\Select::make('status')
 //                    ->options(ClientStatus::class)
-
-
                     ->options(fn() => collect(ClientStatus::cases())
                         ->mapWithKeys(function ($status) use ($customColors) {
                             // Возвращаем массив, где ключ - это значение статуса, а значение - HTML-метка с цветом
@@ -113,7 +112,7 @@ class ClientResource extends Resource
     public static function getRelations (): array
     {
         return [
-            //
+            RelationManagers\PersonsRelationManager::class,
         ];
     }
 

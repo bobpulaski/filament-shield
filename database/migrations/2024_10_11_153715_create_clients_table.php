@@ -9,26 +9,26 @@ return new class extends Migration {
     /**
      * Run the migrations.
      */
-    public function up (): void
+    public function up(): void
     {
-        Schema::create ('clients', function (Blueprint $table) {
-            $table->id ();
+        Schema::create('clients', function (Blueprint $table) {
+            $table->id();
 
-            $table->foreignId ('user_id')->constrained ('users');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
 
-            $table->string ('name');
-            $table->string ('inn');
+            $table->string('name');
+            $table->string('inn');
             $table->tinyInteger('status')->default(1);
 
-            $table->timestamps ();
+            $table->timestamps();
         });
     }
 
     /**
      * Reverse the migrations.
      */
-    public function down (): void
+    public function down(): void
     {
-        Schema::dropIfExists ('clients');
+        Schema::dropIfExists('clients');
     }
 };

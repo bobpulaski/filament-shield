@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 
 use App\Models\Scopes\UserRoomScope;
 use App\Observers\ClientObserver;
-
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 #[ScopedBy([UserRoomScope::class])]
 #[ObservedBy([ClientObserver::class])]
@@ -27,5 +27,10 @@ class Client extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function persons(): HasMany
+    {
+        return $this->hasMany(Person::class);
     }
 }

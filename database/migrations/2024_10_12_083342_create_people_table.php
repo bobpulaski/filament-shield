@@ -14,6 +14,12 @@ return new class extends Migration
         Schema::create('people', function (Blueprint $table) {
             $table->id();
 
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('client_id')->nullable(true);
+            $table->string('name');
+            $table->string('surname');
+
+
             $table->timestamps();
         });
     }

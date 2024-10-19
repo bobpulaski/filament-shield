@@ -17,23 +17,28 @@ class PersonResource extends Resource
 {
     protected static ?string $model = Person::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-users';
     protected static ?string $label = 'Контакт';
     protected static ?string $pluralLabel = 'Контакты';
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make ('surname')
-                    ->required ()
-                    ->maxLength (50),
+                Forms\Components\TextInput::make('surname')
+                    ->required()
+                    ->maxLength(50),
 
-                    Forms\Components\TextInput::make ('name')
-                    ->required ()
-                    ->maxLength (25),
+                Forms\Components\TextInput::make('name')
+                    ->required()
+                    ->maxLength(25),
 
-                    Forms\Components\Select::make('client_id')
+                Forms\Components\Select::make('client_id')
                     ->relationship('client', 'name'),
             ]);
     }
@@ -42,15 +47,15 @@ class PersonResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make ('id'),
-                Tables\Columns\TextColumn::make ('name'),
-                Tables\Columns\TextColumn::make ('surname'),
-                Tables\Columns\TextColumn::make ('client.name')
-                    ->getStateUsing(fn ($record) => $record->client->name ?? null)
+                Tables\Columns\TextColumn::make('id'),
+                Tables\Columns\TextColumn::make('name'),
+                Tables\Columns\TextColumn::make('surname'),
+                Tables\Columns\TextColumn::make('client.name')
+                    ->getStateUsing(fn($record) => $record->client->name ?? null)
                     ->html()
-                    ->extraAttributes(fn ($record) => [
-                    'class' => $record->client && $record->client->name ? null : 'text-red-500',
-                ]),
+                    ->extraAttributes(fn($record) => [
+                        'class' => $record->client && $record->client->name ? null : 'text-red-500',
+                    ]),
             ])
             ->filters([
                 //

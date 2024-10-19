@@ -16,7 +16,7 @@ return new class extends Migration
 
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('type')->nullable(false);
-            $table->tinyInteger('weight')->default(1);
+            $table->tinyInteger('weight');
 
             $table->timestamps();
         });

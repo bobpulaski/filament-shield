@@ -16,14 +16,21 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class ClientTypeResource extends Resource
 {
     protected static ?string $model = ClientType::class;
-
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationLabel = 'Тип клиента';
+    protected static ?string $pluralLabel = 'Тип клиента';
+    protected static ?string $navigationIcon = 'heroicon-o-cube';
+    protected static ?string $navigationGroup = 'Словари';
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                //
+                Forms\Components\TextInput::make('type'),
+                Forms\Components\TextInput::make('weight'),
             ]);
     }
 
@@ -31,10 +38,10 @@ class ClientTypeResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make ('id'),
-                Tables\Columns\TextColumn::make ('user_id'),
-                Tables\Columns\TextColumn::make ('type'),
-                Tables\Columns\TextColumn::make ('weight'),
+                Tables\Columns\TextColumn::make('id'),
+                Tables\Columns\TextColumn::make('user_id'),
+                Tables\Columns\TextColumn::make('type'),
+                Tables\Columns\TextColumn::make('weight'),
             ])
             ->filters([
                 //

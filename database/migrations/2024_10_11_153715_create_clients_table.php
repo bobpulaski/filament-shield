@@ -15,10 +15,11 @@ return new class extends Migration {
             $table->id();
 
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('type_id')->constrained('client_types')->onDelete('cascade');
 
             $table->string('name');
             $table->string('inn');
-            $table->tinyInteger('status')->default(1);
+            $table->tinyInteger('status');
 
             $table->timestamps();
         });

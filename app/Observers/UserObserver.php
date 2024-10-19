@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\User;
+use App\Models\ClientType;
 
 class UserObserver
 {
@@ -11,7 +12,17 @@ class UserObserver
      */
     public function created(User $user): void
     {
-        // dd($user);
+
+        $clientTypes = [
+            ['user_id' => $user->id, 'type' => 'Клиент', 'weight' => 1],
+            ['user_id' => $user->id, 'type' => 'Поставщик', 'weight' => 2],
+            ['user_id' => $user->id, 'type' => 'Конкурент', 'weight' => 3],
+            ['user_id' => $user->id, 'type' => 'Партнер', 'weight' => 4],
+            ['user_id' => $user->id, 'type' => 'Другое', 'weight' => 5],
+        ];
+
+        // Пакетное создание записей
+        ClientType::insert($clientTypes);
     }
 
     /**

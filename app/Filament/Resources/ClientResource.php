@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ClientResource\Pages;
 use App\Filament\Resources\ClientResource\RelationManagers;
 use App\Models\Client;
+use App\Models\ClientType;
 use Filament\Actions\CreateAction;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -26,6 +27,10 @@ class ClientResource extends Resource
     protected static ?string $label = 'Клиент';
     protected static ?string $pluralLabel = 'Клиенты';
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
 
     // public static function getEloquentQuery (): Builder
     // {
@@ -34,10 +39,10 @@ class ClientResource extends Resource
 
 
 
-    public static function form (Form $form): Form
+    public static function form(Form $form): Form
     {
         $customColors = [
-            ClientStatus::New->value => '#adb5bd', // Красный
+            ClientStatus::New ->value => '#adb5bd', // Красный
             ClientStatus::Progress->value => '#2d728f', // Зеленый
             ClientStatus::Active->value => '#02c39a', // Синий
             ClientStatus::Lost->value => '#dd1c1a', // Желтый
@@ -48,84 +53,88 @@ class ClientResource extends Resource
         ];
 
         return $form
-            ->schema ([
-                Forms\Components\TextInput::make ('name')
-                    ->required ()
-                    ->maxLength (255),
-                Forms\Components\TextInput::make ('inn')
-                    ->required ()
-                    ->maxLength (255),
+            ->schema([
+                Forms\Components\TextInput::make('name')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('inn')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\Select::make('type_id')
+                    ->relationship('type', 'type'),
                 Forms\Components\Select::make('status')
-//                    ->options(ClientStatus::class)
-                    ->options(fn() => collect(ClientStatus::cases())
-                        ->mapWithKeys(function ($status) use ($customColors) {
-                            // Возвращаем массив, где ключ - это значение статуса, а значение - HTML-метка с цветом
-                            return [
-                                $status->value => "<span style='color: {$customColors[$status->value]};'>{$status->getLabel()}</span>"
-                            ];
-                        })
+                    //                    ->options(ClientStatus::class)
+                    ->options(
+                        fn() => collect(ClientStatus::cases())
+                            ->mapWithKeys(function ($status) use ($customColors) {
+                                // Возвращаем массив, где ключ - это значение статуса, а значение - HTML-метка с цветом
+                                return [
+                                    $status->value => "<span style='color: {$customColors[$status->value]};'>{$status->getLabel()}</span>"
+                                ];
+                            })
                     )
                     ->native(false)
                     ->allowHtml()
                     ->default(1)
                     ->suffixIcon('heroicon-m-bookmark')
-                    ->required (),
+                    ->required(),
             ]);
 
     }
 
 
 
-    public static function table (Table $table): Table
+    public static function table(Table $table): Table
     {
         return $table
-            ->columns ([
-                Tables\Columns\TextColumn::make ('id'),
-                Tables\Columns\TextColumn::make ('name'),
-                Tables\Columns\TextColumn::make ('inn'),
-                Tables\Columns\TextColumn::make ('status')
-                ->badge(),
-                Tables\Columns\TextColumn::make ('user_id'),
-                Tables\Columns\TextColumn::make ('user.name'),
+            ->columns([
+                Tables\Columns\TextColumn::make('id'),
+                Tables\Columns\TextColumn::make('name'),
+                Tables\Columns\TextColumn::make('inn'),
+                Tables\Columns\TextColumn::make('status')
+                    ->badge(),
+                Tables\Columns\TextColumn::make('user_id'),
+                Tables\Columns\TextColumn::make('user.name'),
+                Tables\Columns\TextColumn::make('type.type'),
             ])
-            ->filters ([
+            ->filters([
                 //
             ])
-            ->actions ([
+            ->actions([
                 ActionGroup::make([
-                    Tables\Actions\ViewAction::make (),
-                    Tables\Actions\EditAction::make (),
-                    Tables\Actions\DeleteAction::make (),
+                    Tables\Actions\ViewAction::make(),
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\DeleteAction::make(),
                 ])
             ])
-            ->bulkActions ([
-                Tables\Actions\BulkActionGroup::make ([
-                    Tables\Actions\DeleteBulkAction::make (),
+            ->bulkActions([
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
-//          Так нельзя, нужно ко всему ресурсу глобально, иначе можно в адресе подменить ID
+        //          Так нельзя, нужно ко всему ресурсу глобально, иначе можно в адресе подменить ID
 //            ->modifyQueryUsing (function ($query) {
 //                return $query->where ('user_id', auth ()->id ());
 //            });
     }
 
-    public static function getRelations (): array
+    public static function getRelations(): array
     {
         return [
             RelationManagers\PersonsRelationManager::class,
         ];
     }
 
-    public static function getPages (): array
+    public static function getPages(): array
     {
         return [
-            'index' => Pages\ListClients::route ('/'),
-            'create' => Pages\CreateClient::route ('/create'),
-            'edit' => Pages\EditClient::route ('/{record}/edit'),
+            'index' => Pages\ListClients::route('/'),
+            'create' => Pages\CreateClient::route('/create'),
+            'edit' => Pages\EditClient::route('/{record}/edit'),
         ];
     }
 
-//    protected function getHeaderActions (): array
+    //    protected function getHeaderActions (): array
 //    {
 //        return [
 //            CreateAction::make ()

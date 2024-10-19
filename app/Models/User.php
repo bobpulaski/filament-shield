@@ -12,8 +12,10 @@ use Filament\Models\Contracts\FilamentUser;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
 
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use App\Observers\UserObserver;
 
-
+#[ObservedBy([UserObserver::class])]
 
 class User extends Authenticatable implements FilamentUser
 {

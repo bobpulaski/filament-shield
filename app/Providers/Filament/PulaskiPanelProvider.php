@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Auth\CustomRegister;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -27,7 +28,7 @@ class PulaskiPanelProvider extends PanelProvider
             ->id('pulaski')
             ->path('pulaski')
             ->login()
-            ->registration()
+            ->registration(CustomRegister::class)
             ->colors([
                 'primary' => Color::Cyan,
             ])

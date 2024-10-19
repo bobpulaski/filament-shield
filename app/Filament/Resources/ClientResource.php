@@ -61,7 +61,13 @@ class ClientResource extends Resource
                     ->required()
                     ->maxLength(255),
                 Forms\Components\Select::make('type_id')
-                    ->relationship('type', 'type'),
+                    ->relationship(
+                        'type',
+                        'type',
+                        fn(Builder $query
+                    ) => $query->orderBy('weight', 'asc')
+                    )
+                    ->required(),
                 Forms\Components\Select::make('status')
                     //                    ->options(ClientStatus::class)
                     ->options(
@@ -95,7 +101,8 @@ class ClientResource extends Resource
                     ->badge(),
                 Tables\Columns\TextColumn::make('user_id'),
                 Tables\Columns\TextColumn::make('user.name'),
-                Tables\Columns\TextColumn::make('type.type'),
+                Tables\Columns\TextColumn::make('type.type')
+                    ->label('Тип'),
             ])
             ->filters([
                 //

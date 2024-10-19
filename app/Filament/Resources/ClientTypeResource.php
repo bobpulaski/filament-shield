@@ -12,6 +12,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Tables\Actions\ActionGroup;
 
 class ClientTypeResource extends Resource
 {
@@ -30,7 +31,8 @@ class ClientTypeResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('type'),
-                Forms\Components\TextInput::make('weight'),
+                Forms\Components\TextInput::make('weight')
+                    ->label('Вес')
             ]);
     }
 
@@ -41,13 +43,19 @@ class ClientTypeResource extends Resource
                 Tables\Columns\TextColumn::make('id'),
                 Tables\Columns\TextColumn::make('user_id'),
                 Tables\Columns\TextColumn::make('type'),
-                Tables\Columns\TextColumn::make('weight'),
-            ])
+                Tables\Columns\TextColumn::make('weight')
+                    ->label('Вес')
+                    ->sortable(true),
+            ])->defaultSort('weight', 'asc')
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                ActionGroup::make([
+                    Tables\Actions\ViewAction::make(),
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\DeleteAction::make(),
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
